@@ -4,11 +4,13 @@ import './style.css';
 interface IWordboxProp {
   word: string;
   onFinish: () => void;
+  active: boolean;
+  onMistake: () => void;
 }
 
-const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish }) => {
-  const [lettersLeft, setLettersLeft] = useState<string>(word);  
-  const [mistake, setMistake] = useState<boolean>(false);
+const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake }) => {
+  const [lettersLeft, setLettersLeft] = useState<string>(word)
+  const [mistake, setMistake] = useState<boolean>(false)
 
   useEffect(
     () => {
@@ -24,23 +26,24 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish }) => {
           }
         } else {
           setMistake(true)
+          onMistake()
         }
 
     }
 
-      document.addEventListener('keyup', handleKeyUp);
+      active && document.addEventListener('keyup', handleKeyUp)
 
       return () => {
-        document.removeEventListener('keyup', handleKeyUp); 
+        active && document.removeEventListener('keyup', handleKeyUp)
       }
   },
-    [lettersLeft]
-  );
+    [lettersLeft, onFinish, active, onMistake]
+  )
 
   
   return (
     <div className={mistake ? "wordbox wordbox--mistake" : "wordbox"}>{lettersLeft}</div>
-  );
-};
+  )
+}
 
 export default Wordbox;

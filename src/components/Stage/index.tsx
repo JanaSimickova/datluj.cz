@@ -8,19 +8,20 @@ import './style.css';
 const generateWord = (size: number) => {
   const sizeIndex = size === undefined
     ? Math.floor(Math.random() * wordList.length)
-    : size - 3;
+    : size - 3
   
   if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-    return null;
+    return null
   }
   
   const words = wordList[sizeIndex];
-  const wordIndex = Math.floor(Math.random() * words.length);
-  return words[wordIndex];
-};
+  const wordIndex = Math.floor(Math.random() * words.length)
+  return words[wordIndex]
+}
 
 const Stage = () => {
-  const [words, setWords] = useState<string[]>(['jahoda']);
+  const [words, setWords] = useState<string[]>(['jahoda', 'malina', 'borůvka'])
+  const [mistakes, setMistakes] = useState<number>(0)
 
   const handleFinish = () => {
     const newWord = generateWord(6)
@@ -29,14 +30,25 @@ const Stage = () => {
     }
   }
 
+  const handleMistake = () => {
+    setMistakes(x => x + 1)
+  }
+
   return (
     <div className="stage">
-      <div className="stage__mistakes">Chyb: 0</div>
+      <div className="stage__mistakes">Chyb: {mistakes}</div>
       <div className="stage__words">
-        {words.map((word) => <Wordbox word={word} key={word} onFinish={handleFinish} />)}
+        {words.map((word) => 
+        <Wordbox 
+          word={word} 
+          key={word} 
+          onFinish={handleFinish} 
+          active={word === words[0]}
+          onMistake={handleMistake}
+          />)}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Stage;
