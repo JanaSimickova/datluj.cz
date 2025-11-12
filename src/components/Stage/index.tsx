@@ -31,7 +31,7 @@ const Stage = () => {
   }
 
   const handleMistake = () => {
-    setMistakes(x => x + 1)
+    setMistakes(oldMistakes => oldMistakes + 1)
   }
 
   return (
