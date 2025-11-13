@@ -27,10 +27,12 @@ const Stage = () => {
 
   const [words, setWords] = useState<string[]>(initializeWords(3, 6))
   const [mistakes, setMistakes] = useState<number>(0)
+  const [score, setScore] = useState<number>(0)
 
   const handleFinish = () => {
     const newWord = generateWord(6)
     setWords([...words.slice(1), newWord])
+    setScore(oldScore => oldScore + 1)
   }
 
   const handleMistake = () => {
@@ -39,7 +41,10 @@ const Stage = () => {
 
   return (
     <div className="stage">
-      <div className="stage__mistakes">Chyb: {mistakes}</div>
+      <div className="stage__header">
+        <div className="stage__mistakes">Chyb: {mistakes}</div>
+        <div className="stage__score">Skóre: {score}</div>
+      </div>
       <div className="stage__words">
         {words.map((word) => 
         <Wordbox 

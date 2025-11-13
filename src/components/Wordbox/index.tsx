@@ -17,7 +17,7 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
       function handleKeyUp(event: KeyboardEvent) {
         const key = event.key
          
-         if (event.key === 'F5') {
+         if (key === 'F5') {
           window.location.reload()
           return
         }
@@ -34,7 +34,7 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
           onMistake()
         }
 
-    }
+      }
 
       active && document.addEventListener('keyup', handleKeyUp)
 
