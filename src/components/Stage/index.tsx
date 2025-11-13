@@ -11,7 +11,7 @@ const generateWord = (size: number) => {
     : size - 3
   
   if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-    return null
+    return ""
   }
   
   const words = wordList[sizeIndex];
@@ -20,14 +20,17 @@ const generateWord = (size: number) => {
 }
 
 const Stage = () => {
-  const [words, setWords] = useState<string[]>(['jahoda', 'malina', 'borůvka'])
+  
+  const initializeWords = (count: number, length: number): string[] => {
+    return Array.from({ length: count }, () => generateWord(length))
+  }
+
+  const [words, setWords] = useState<string[]>(initializeWords(3, 6))
   const [mistakes, setMistakes] = useState<number>(0)
 
   const handleFinish = () => {
     const newWord = generateWord(6)
-    if (newWord !== null) {
     setWords([...words.slice(1), newWord])
-    }
   }
 
   const handleMistake = () => {
