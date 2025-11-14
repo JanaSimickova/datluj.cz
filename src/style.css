@@ -9,7 +9,13 @@ html {
 }
 
 .container {
-  width: 720px;
+  width: 600px;
   margin-right: auto;
   margin-left: auto;
+}
+
+.title {
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
 }

@@ -45,9 +45,19 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
     [lettersLeft, onFinish, active, onMistake]
   )
 
+  const getWordboxClass = (active: boolean, mistake: boolean): string => {
+    if (active && mistake) {
+      return "wordbox wordbox--active wordbox--mistake"
+    }
+    if (active) {
+      return "wordbox wordbox--active"
+    }
+    return "wordbox"
+  }
+
   
   return (
-    <div className={mistake ? "wordbox wordbox--mistake" : "wordbox"}>{lettersLeft}</div>
+    <div className={getWordboxClass(active, mistake)}>{lettersLeft}</div>
   )
 }
 

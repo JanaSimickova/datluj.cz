@@ -11,7 +11,7 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
-      <h1>Datlování</h1>
+      <h1 className="title">Datlování</h1>
       {!isGameStarted ? (
         <GameStart onStart={handleStartGame} />
       ) : (

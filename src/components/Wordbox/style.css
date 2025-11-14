@@ -2,7 +2,7 @@
   display: inline-block;
   position: relative;
   padding: 16px;
-  margin: 4px;
+  margin: 10px;
   background-color: #8fb935;
   font-weight: bold;
   text-align: center;
@@ -11,6 +11,14 @@
   line-height: 16px;
   border-radius: 8px;
   z-index: 1;
+}
+
+.wordbox--active {
+  background-color: green;
+  color: white;
+  font-size: 18px;
+  padding: 20px;
+  margin: 20px;
 }
 
 .wordbox--mistake {
