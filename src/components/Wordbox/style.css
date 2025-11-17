@@ -11,6 +11,7 @@
   line-height: 16px;
   border-radius: 8px;
   z-index: 1;
+  box-shadow: 0 10px 22px rgba(0, 91, 187, 0.18)
 }
 
 .wordbox--active {
@@ -24,4 +25,25 @@
 .wordbox--mistake {
   background-color: #e64747;
   color: white;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
 }

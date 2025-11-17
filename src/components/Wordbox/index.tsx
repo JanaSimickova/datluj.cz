@@ -17,8 +17,12 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
       function handleKeyUp(event: KeyboardEvent) {
         const key = event.key
          
-         if (key === 'F5') {
+        if (key === 'F5') {
           window.location.reload()
+          return
+        }
+
+        if (key === 'Enter') {
           return
         }
 

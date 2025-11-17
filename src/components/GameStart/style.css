@@ -2,35 +2,76 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 340px;
-  gap: 30px;
-  padding: 40px 20px;
+  justify-content: flex-start;
+  min-height: 420px;
+  gap: 18px;
+  padding: 36px 20px 80px;
   text-align: center;
+  background: linear-gradient(180deg, #ffffff, #f7fbf3);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(10, 30, 10, 0.06);
 }
 
 .welcome-text {
-  font-size: 24px;
+  font-size: 22px;
   margin: 0;
+  color: #083006;
+}
+
+.welcome__rules {
+  margin: 0;
+  color: #4b6748;
+  max-width: 640px;
+}
+
+form {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+label {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: #21421e;
+}
+
+input[type="text"] {
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d6e4d0;
+  background: #fff;
+  outline: none;
+  font-size: 16px;
+}
+
+input[type="text"]:focus {
+  border-color: #92c06a;
+  box-shadow: 0 4px 14px rgba(86, 163, 87, 0.12);
 }
 
 .start-button {
-  padding: 15px 40px;
+  padding: 14px 36px;
+  margin: 36px auto;
   font-size: 18px;
   font-weight: 700;
   color: white;
   background-color: #007bff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 22px rgba(0, 91, 187, 0.18);
 }
 
 .start-button:hover {
-  background-color: #0056b3;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background-color: #0062d1;
+  box-shadow: 0 12px 26px rgba(0, 91, 187, 0.2);
 }
 
-.start-button:active {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
