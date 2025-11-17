@@ -78,6 +78,16 @@ const Stage = ({ playerName }: StageProps) => {
     localStorage.setItem('highestScores', jsonString);
   }
 
+  const getScoreFormated = (score: number) => {
+    if(score === 1) {
+      return `${score} bod`
+    } else if (score >= 2 && score <= 4) {
+      return `${score} body`
+    } else {
+      return `${score} bodů`
+    }
+  }
+
   return (
     <div className="stage">
       {mistakes < 5 && (
@@ -103,7 +113,7 @@ const Stage = ({ playerName }: StageProps) => {
         <div className="stage__game-over">
           <h2 className="gameover__title">Hra skončila!</h2>
           <p className="gameover__result">
-            Výsledek hráče {playerData.playerName}: {playerData.score} bodů
+            Výsledek hráče {playerData.playerName}: <strong>{getScoreFormated(playerData.score)}</strong>
           </p>
           <h2 className="gameover__table-title">Tabulka nejlepších výsledků</h2>
           <table className="stage__leaderboard">
