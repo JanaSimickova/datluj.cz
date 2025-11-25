@@ -14,7 +14,7 @@ const GameStart = ({onSubmit, onChange}: GameStartProps) => {
       <form onSubmit={onSubmit}>
         <label htmlFor="name">
           Zadej své jméno:
-          <input type="text" id="name" name="name" onChange={onChange} />
+          <input type="text" id="name" name="name" onChange={onChange} required autoFocus />
         </label>
         <button type="submit" className="start-button">Start</button>
       </form>

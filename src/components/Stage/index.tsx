@@ -139,6 +139,7 @@ const Stage = ({ playerName }: StageProps) => {
                 ))}
             </tbody>
           </table>
+          <button className="play-again-button" onClick={() => {window.location.reload()}}>Hrát znovu</button>
         </div>
       )}
     </div>
