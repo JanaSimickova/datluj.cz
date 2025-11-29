@@ -137,3 +137,29 @@
   background-color: #7da12f;
   box-shadow: 0 12px 26px rgba(0, 91, 187, 0.2);
 }
+
+.stage__timer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  height: 48px;
+  padding: 8px 14px;
+  background: linear-gradient(90deg, #00a86b 0%, #009955 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.14);
+  letter-spacing: 0.6px;
+}
+
+.stage__timer--time-low {
+  background: linear-gradient(90deg, #ffb74d 0%, #ff9800 100%);
+}
+
+.stage__timer--time-danger {
+  background: linear-gradient(90deg, #ff6b6b 0%, #e63946 100%);
+}
+
+

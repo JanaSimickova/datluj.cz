@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Wordbox from '../Wordbox';
 import wordList from '../../word-list';
 import './style.css';
@@ -25,7 +25,7 @@ export interface StageProps {
 export interface PlayerDataStructure {
   playerName: string;
   score: number;
-  scoreDate: string;
+  date: string;
 }
 
 type HighestScores = PlayerDataStructure[];
@@ -35,16 +35,53 @@ const Stage = ({ playerName }: StageProps) => {
     return Array.from({ length: count }, () => generateWord(length));
   };
 
+  const gameDuration: number = 10
+  const wordLength: number = 6
+  const maxMistakes: number = 5
+
+  // opravit chybu, aby to každou sekundu nenačítalo nové skóre
+  // přidat komentáře, přidat životy srdíčka místo chyb, přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
+
   const [words, setWords] = useState<string[]>(initializeWords(3, 6));
   const [mistakes, setMistakes] = useState<number>(0);
   const [playerData, setPlayerData] = useState<PlayerDataStructure>({
     playerName: playerName,
     score: 0,
-    scoreDate: '',
+    date: '',
   });
+  const [gameOver, setGameOver] = useState<boolean>(false)
+  const [time, setTime] = useState<number>(gameDuration)
+  
+  useEffect(
+    () => {
+      const gameTimer = setInterval(
+        () => {
+          setGameOver(true)
+        }, gameDuration * 1000
+      )
+
+      return () => {
+        clearInterval(gameTimer)
+      }
+    }, [gameOver])
+
+  useEffect(
+    () => {
+      const timeChangeTimer = setInterval(
+        () => {
+          setTime(time => time -1)
+          setTimerClassName(time)
+        }, 1000
+      )
+
+      return () => {
+        clearInterval(timeChangeTimer)
+      }
+    }, [time])
+  
 
   const handleFinish = () => {
-    const newWord = generateWord(6);
+    const newWord = generateWord(wordLength);
     setWords([...words.slice(1), newWord]);
     setPlayerData((playerData) => ({
       ...playerData,
@@ -62,7 +99,7 @@ const Stage = ({ playerName }: StageProps) => {
     scores = JSON.parse(storedString);
   }
 
-  if (mistakes >= 5) {
+  if (mistakes >= maxMistakes || gameOver) {
     const date = new Date();
     const formatedDate = date.toLocaleString('cs-CZ');
     scores = [
@@ -70,7 +107,7 @@ const Stage = ({ playerName }: StageProps) => {
       {
         playerName: playerData.playerName,
         score: playerData.score,
-        scoreDate: formatedDate,
+        date: formatedDate,
       },
     ];
     const jsonString = JSON.stringify(scores);
@@ -88,14 +125,43 @@ const Stage = ({ playerName }: StageProps) => {
     }
   }
 
+  const playAgain = () => {
+    setMistakes(0)
+    setPlayerData((playerData) => ({
+      ...playerData,
+      score: 0,
+    }))
+    setGameOver(false)
+    setTime(60)
+  }
+
+  const setTimerClassName = (seconds: number) => {
+    if(seconds <= 30 && seconds > 10) {
+      return "stage__timer stage__timer--time-low"
+    } else if (seconds <= 10) {
+      return "stage__timer stage__timer--time-danger"
+    } else {
+      return "stage__timer"
+    }
+  }
+
+  const getMinutesFormated = (time: number) => {
+    return (time >= 60 ? Math.floor(time / 60) : 0).toString().padStart(2, '0')
+  }
+
+  const getSecondsFormated = (time: number) => {
+    return (time % 60).toString().padStart(2, '0')
+  }
+
   return (
     <div className="stage">
-      {mistakes < 5 && (
+      {(mistakes < maxMistakes && !gameOver) && (
         <div>
           <div className="stage__header">
             <div className="stage__mistakes">Chyb: {mistakes}</div>
             <div className="stage__score">Skóre: {playerData.score}</div>
           </div>
+          <div className={setTimerClassName(time)}>Zbývající čas {getMinutesFormated(time)}:{getSecondsFormated(time)}</div>
           <div className="stage__words">
             {words.map((word) => (
               <Wordbox
@@ -109,7 +175,7 @@ const Stage = ({ playerName }: StageProps) => {
           </div>
         </div>
       )}
-      {mistakes >= 5 && (
+      {(mistakes >= maxMistakes || gameOver) && (
         <div className="stage__game-over">
           <h2 className="gameover__title">Hra skončila!</h2>
           <p className="gameover__result">
@@ -134,12 +200,12 @@ const Stage = ({ playerName }: StageProps) => {
                     <td className="rank">{index + 1}</td>
                     <td>{entry.playerName}</td>
                     <td className="score">{entry.score}</td>
-                    <td>{entry.scoreDate}</td>
+                    <td>{entry.date}</td>
                   </tr>
                 ))}
             </tbody>
           </table>
-          <button className="play-again-button" onClick={() => {window.location.reload()}}>Hrát znovu</button>
+          <button className="play-again-button" onClick={playAgain}>Hrát znovu</button>
         </div>
       )}
     </div>
