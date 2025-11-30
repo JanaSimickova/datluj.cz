@@ -35,13 +35,14 @@ const Stage = ({ playerName }: StageProps) => {
     return Array.from({ length: count }, () => generateWord(length));
   };
 
-  const gameDuration: number = 10
+  // proměnné pro nastavení základních pravidel hry
+  const gameDuration: number = 60
   const wordLength: number = 6
   const maxMistakes: number = 5
 
-  // opravit chybu, aby to každou sekundu nenačítalo nové skóre
-  // přidat komentáře, přidat životy srdíčka místo chyb, přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
+  // přidat životy srdíčka místo chyb, přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
 
+  // všechny stavy pro tuto komponentu
   const [words, setWords] = useState<string[]>(initializeWords(3, 6));
   const [mistakes, setMistakes] = useState<number>(0);
   const [playerData, setPlayerData] = useState<PlayerDataStructure>({
@@ -49,37 +50,11 @@ const Stage = ({ playerName }: StageProps) => {
     score: 0,
     date: '',
   });
-  const [gameOver, setGameOver] = useState<boolean>(false)
-  const [time, setTime] = useState<number>(gameDuration)
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [time, setTime] = useState<number>(gameDuration);
+  const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
   
-  useEffect(
-    () => {
-      const gameTimer = setInterval(
-        () => {
-          setGameOver(true)
-        }, gameDuration * 1000
-      )
-
-      return () => {
-        clearInterval(gameTimer)
-      }
-    }, [gameOver])
-
-  useEffect(
-    () => {
-      const timeChangeTimer = setInterval(
-        () => {
-          setTime(time => time -1)
-          setTimerClassName(time)
-        }, 1000
-      )
-
-      return () => {
-        clearInterval(timeChangeTimer)
-      }
-    }, [time])
-  
-
+  // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre
   const handleFinish = () => {
     const newWord = generateWord(wordLength);
     setWords([...words.slice(1), newWord]);
@@ -89,42 +64,78 @@ const Stage = ({ playerName }: StageProps) => {
     }));
   };
 
+  // funkce pro počítání chyb při napsání nesprávného písmena
   const handleMistake = () => {
     setMistakes((oldMistakes) => oldMistakes + 1);
   };
 
+  // načtení dat z localStorage pro zobrazení v tabulce nejlepších výsledků
   let scores: HighestScores = [];
   const storedString = localStorage.getItem('highestScores');
   if (storedString) {
-    scores = JSON.parse(storedString);
-  }
-
-  if (mistakes >= maxMistakes || gameOver) {
-    const date = new Date();
-    const formatedDate = date.toLocaleString('cs-CZ');
-    scores = [
-      ...scores,
-      {
-        playerName: playerData.playerName,
-        score: playerData.score,
-        date: formatedDate,
-      },
-    ];
-    const jsonString = JSON.stringify(scores);
-
-    localStorage.setItem('highestScores', jsonString);
-  }
-
-  const getScoreFormated = (score: number) => {
-    if(score === 1) {
-      return `${score} bod`
-    } else if (score >= 2 && score <= 4) {
-      return `${score} body`
-    } else {
-      return `${score} bodů`
+    try {
+      scores = JSON.parse(storedString);
+    } catch (e) {
+      scores = [];
     }
   }
 
+  // uložení skóre po dokončení hry
+  useEffect(() => {
+    if (!(mistakes >= maxMistakes || gameOver)) return;
+    if (hasSavedScore) return;
+
+    const stored = localStorage.getItem('highestScores');
+    let current: HighestScores = [];
+    if (stored) {
+      try {
+        current = JSON.parse(stored);
+      } catch (e) {
+        current = [];
+      }
+    }
+
+    const date = new Date();
+    const formatedDate = date.toLocaleString('cs-CZ');
+
+    const updated = [
+      ...current,
+      { playerName: playerData.playerName, score: playerData.score, date: formatedDate },
+    ];
+
+    try {
+      localStorage.setItem('highestScores', JSON.stringify(updated));
+      setHasSavedScore(true);
+    } catch (e) {
+      console.warn('Failed to save score', e);
+    }
+  }, [mistakes, gameOver, hasSavedScore, playerData.playerName, playerData.score]);
+  
+  // nastavení časovače pro celou hru
+  useEffect(() => {
+    if (gameOver) return
+    const gameTimeout = setTimeout(() => setGameOver(true), gameDuration * 1000)
+    console.log('game MOUNT')
+    return () => clearTimeout(gameTimeout)
+  }, [gameOver, gameDuration])
+
+  // nastavení intervalu pro odečítání času v průběhu hry
+  useEffect(() => {
+    if (gameOver) return;
+    const timeChangeInterval = setInterval(() => {
+      setTime((prev) => {
+        if (prev <= 1) {
+          setGameOver(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000)
+    console.log('time MOUNT')
+    return () => clearInterval(timeChangeInterval)
+  }, [gameOver])
+
+  // funkce, která se spustí po kliknutí na tlačítko Hrát znovu
   const playAgain = () => {
     setMistakes(0)
     setPlayerData((playerData) => ({
@@ -132,9 +143,11 @@ const Stage = ({ playerName }: StageProps) => {
       score: 0,
     }))
     setGameOver(false)
-    setTime(60)
+    setTime(gameDuration)
+    setHasSavedScore(false)
   }
 
+  // funkce pro nastavení třídy elementu s odpočtem času
   const setTimerClassName = (seconds: number) => {
     if(seconds <= 30 && seconds > 10) {
       return "stage__timer stage__timer--time-low"
@@ -145,12 +158,23 @@ const Stage = ({ playerName }: StageProps) => {
     }
   }
 
+  // dvě funkce pro získání správného formátu minut a sekund pro obsah elementu s odpočtem času
   const getMinutesFormated = (time: number) => {
     return (time >= 60 ? Math.floor(time / 60) : 0).toString().padStart(2, '0')
   }
-
   const getSecondsFormated = (time: number) => {
     return (time % 60).toString().padStart(2, '0')
+  }
+
+  // funkce pro získání správného formátu slova bod do závěrečného vyhodnocení
+  const getScoreFormated = (score: number) => {
+    if(score === 1) {
+      return `${score} bod`
+    } else if (score >= 2 && score <= 4) {
+      return `${score} body`
+    } else {
+      return `${score} bodů`
+    }
   }
 
   return (
