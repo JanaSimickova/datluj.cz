@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Wordbox from '../Wordbox';
+import { GameOver } from '../GameOver';
 import wordList from '../../word-list';
 import './style.css';
 
@@ -28,7 +29,7 @@ export interface PlayerDataStructure {
   date: string;
 }
 
-type HighestScores = PlayerDataStructure[];
+export type HighestScores = PlayerDataStructure[];
 
 const Stage = ({ playerName }: StageProps) => {
   const initializeWords = (count: number, length: number): string[] => {
@@ -115,7 +116,7 @@ const Stage = ({ playerName }: StageProps) => {
   useEffect(() => {
     if (gameOver) return
     const gameTimeout = setTimeout(() => setGameOver(true), gameDuration * 1000)
-    console.log('game MOUNT')
+
     return () => clearTimeout(gameTimeout)
   }, [gameOver, gameDuration])
 
@@ -131,7 +132,7 @@ const Stage = ({ playerName }: StageProps) => {
         return prev - 1;
       });
     }, 1000)
-    console.log('time MOUNT')
+    
     return () => clearInterval(timeChangeInterval)
   }, [gameOver])
 
@@ -166,17 +167,6 @@ const Stage = ({ playerName }: StageProps) => {
     return (time % 60).toString().padStart(2, '0')
   }
 
-  // funkce pro získání správného formátu slova bod do závěrečného vyhodnocení
-  const getScoreFormated = (score: number) => {
-    if(score === 1) {
-      return `${score} bod`
-    } else if (score >= 2 && score <= 4) {
-      return `${score} body`
-    } else {
-      return `${score} bodů`
-    }
-  }
-
   return (
     <div className="stage">
       {(mistakes < maxMistakes && !gameOver) && (
@@ -200,37 +190,7 @@ const Stage = ({ playerName }: StageProps) => {
         </div>
       )}
       {(mistakes >= maxMistakes || gameOver) && (
-        <div className="stage__game-over">
-          <h2 className="gameover__title">Hra skončila!</h2>
-          <p className="gameover__result">
-            Výsledek hráče {playerData.playerName}: <strong>{getScoreFormated(playerData.score)}</strong>
-          </p>
-          <h2 className="gameover__table-title">Tabulka nejlepších výsledků</h2>
-          <table className="stage__leaderboard">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Jméno</th>
-                <th>Skóre</th>
-                <th>Datum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {scores
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 10)
-                .map((entry, index) => (
-                  <tr key={index}>
-                    <td className="rank">{index + 1}</td>
-                    <td>{entry.playerName}</td>
-                    <td className="score">{entry.score}</td>
-                    <td>{entry.date}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <button className="play-again-button" onClick={playAgain}>Hrát znovu</button>
-        </div>
+        <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain}/>
       )}
     </div>
   );

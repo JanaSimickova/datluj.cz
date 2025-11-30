@@ -1,0 +1,93 @@
+.gameover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 20px;
+}
+
+.gameover__title,
+.gameover__table-title {
+  font-size: 28px;
+  margin: 0;
+  color: #083006;
+}
+
+.gameover__title {
+  color: red;
+}
+
+.gameover__result {
+  font-size: 18px;
+  color: #21421e;
+  margin: 0;
+  padding: 12px 16px;
+  background: rgba(159, 209, 59, 0.1);
+  border-left: 4px solid #9fd13b;
+  border-radius: 4px;
+  max-width: 520px;
+}
+
+
+.gameover__leaderboard {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(10, 30, 10, 0.08);
+  overflow: hidden;
+}
+
+.gameover__leaderboard thead {
+  background-color: #8fb935;
+  color: white;
+  font-weight: 700;
+}
+
+.gameover__leaderboard th {
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.gameover__leaderboard td {
+  padding: 12px;
+  border-bottom: 1px solid #e8ebe4;
+  font-size: 14px;
+}
+
+.gameover__leaderboard tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rank {
+  font-weight: 700;
+  color: #8fb935;
+  width: 40px;
+  text-align: center;
+}
+
+.score {
+  font-weight: 600;
+  color: #0b5dc8;
+}
+
+.play-again-button {
+  padding: 14px 36px;
+  margin: 36px auto;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  background-color: #8fb935;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(0, 91, 187, 0.18);
+}
+
+.play-again-button:hover {
+  background-color: #7da12f;
+  box-shadow: 0 12px 26px rgba(0, 91, 187, 0.2);
+}
