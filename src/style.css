@@ -19,3 +19,13 @@ html {
   margin-top: 32px;
   margin-bottom: 32px;
 }
+
+.letter {
+  display: inline-block;
+  margin: 5px;
+  width: 45px;
+  border: 1px solid rgb(189, 189, 189);
+  border-radius: 5px;
+  box-shadow: 3px 3px 5px 1px #3636362e;
+  background: radial-gradient(circle at center, white 0%, white 60%, lightgrey 100%);
+}

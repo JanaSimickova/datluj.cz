@@ -12,6 +12,12 @@
 
 .stage__header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stage__results {
+  display: flex;
   justify-content: space-between;
   margin-bottom: 32px;
 }
@@ -19,21 +25,21 @@
 .stage__mistakes,
 .stage__score {
   text-align: center;
-  margin-bottom: 64px;
+  margin-top: 10px;
   font-size: 16px;
   color: white;
   border-radius: 8px;
   padding: 12px;
-  margin: 4px;
   box-shadow: 0 10px 22px rgba(0, 91, 187, 0.18)
 }
 
 .stage__mistakes {
-  background-color: rgba(225, 0, 0, 0.728);
+  background: linear-gradient(90deg, #f82929ba 0%, #ce0000ba 100%);
 }
 
 .stage__score {
-  background-color: rgb(11, 93, 200);
+  background-color: #0b5dc8;
+  background: linear-gradient(90deg, #176fe2 0%, #0a53b4 100%);
 }
 
 .stage__words {

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Stage from './components/Stage';
 import GameStart from './components/GameStart';
 
+// přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
+
 const App: React.FC = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [playerName, setPlayerName] = useState<string>("");
@@ -15,9 +17,20 @@ const App: React.FC = () => {
     setIsGameStarted(true)
   }
 
+  const wordSplitter = (word: string) => {
+    const letters = word.toUpperCase().split('')
+    return (
+      letters.map((letter) => (
+        <span className="letter">
+          {letter}
+        </span>
+      ))
+    )
+  }
+
   return (
     <div className="container">
-      <h1 className="title">Datlování</h1>
+      <h1 className="title">{wordSplitter("Datlování")}</h1>
       {!isGameStarted ? (
         <GameStart onChange={handleChange} onSubmit={handleSubmit} />
       ) : (

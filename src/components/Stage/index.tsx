@@ -3,6 +3,7 @@ import Wordbox from '../Wordbox';
 import { GameOver } from '../GameOver';
 import wordList from '../../word-list';
 import './style.css';
+import { Lives } from '../Lives';
 
 // TODO: temporary disable function - remove next line when you start using it
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -41,8 +42,6 @@ const Stage = ({ playerName }: StageProps) => {
   const wordLength: number = 6
   const maxMistakes: number = 5
 
-  // přidat životy srdíčka místo chyb, přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
-
   // všechny stavy pro tuto komponentu
   const [words, setWords] = useState<string[]>(initializeWords(3, 6));
   const [mistakes, setMistakes] = useState<number>(0);
@@ -54,6 +53,7 @@ const Stage = ({ playerName }: StageProps) => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [time, setTime] = useState<number>(gameDuration);
   const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
+  const [lives, setLives] = useState<number>(maxMistakes)
   
   // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre
   const handleFinish = () => {
@@ -67,7 +67,8 @@ const Stage = ({ playerName }: StageProps) => {
 
   // funkce pro počítání chyb při napsání nesprávného písmena
   const handleMistake = () => {
-    setMistakes((oldMistakes) => oldMistakes + 1);
+    setMistakes((oldMistakes) => oldMistakes + 1)
+    setLives((oldLives => oldLives - 1))
   };
 
   // načtení dat z localStorage pro zobrazení v tabulce nejlepších výsledků
@@ -146,6 +147,7 @@ const Stage = ({ playerName }: StageProps) => {
     setGameOver(false)
     setTime(gameDuration)
     setHasSavedScore(false)
+    setLives(maxMistakes)
   }
 
   // funkce pro nastavení třídy elementu s odpočtem času
@@ -172,10 +174,15 @@ const Stage = ({ playerName }: StageProps) => {
       {(mistakes < maxMistakes && !gameOver) && (
         <div>
           <div className="stage__header">
+            <div className="stage__lives">
+              <Lives livesNumber={lives}/>
+            </div>
+            <div className={setTimerClassName(time)}>Zbývající čas {getMinutesFormated(time)}:{getSecondsFormated(time)}</div>
+          </div>
+          <div className="stage__results">
             <div className="stage__mistakes">Chyb: {mistakes}</div>
             <div className="stage__score">Skóre: {playerData.score}</div>
           </div>
-          <div className={setTimerClassName(time)}>Zbývající čas {getMinutesFormated(time)}:{getSecondsFormated(time)}</div>
           <div className="stage__words">
             {words.map((word) => (
               <Wordbox
