@@ -10,8 +10,8 @@ const GameStart = ({onSubmit, onChange}: GameStartProps) => {
   return (
     <div className="welcome-screen">
       <p className="welcome-text">Nauč se psát všemi deseti!</p>
-      <p className="welcome-rules">Napiš co nejvíce slov správně za jednu minutu.</p>
-      <p className="welcome-rules">Máš ovšem jen 5 životů - můžeš udělat jen 5 chyb.</p>
+      <p className="welcome-rules">Napiš co nejvíce slov správně za <strong>jednu minutu</strong>.</p>
+      <p className="welcome-rules">Máš ovšem jen <strong>5 životů</strong> - můžeš udělat jen 5 chyb.</p>
       <form onSubmit={onSubmit}>
         <label htmlFor="name">
           Zadej své jméno:

@@ -21,11 +21,26 @@ html {
 }
 
 .letter {
-  display: inline-block;
-  margin: 5px;
-  width: 45px;
-  border: 1px solid rgb(189, 189, 189);
-  border-radius: 5px;
-  box-shadow: 3px 3px 5px 1px #3636362e;
-  background: radial-gradient(circle at center, white 0%, white 60%, lightgrey 100%);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    margin: 5px;
+    border-radius: 6px;
+    font-size: 32px;
+    background: radial-gradient(circle at 50% 50%, 
+        #ffffff 0%, 
+        #f0f0f0 70%, 
+        #d0d0d0 100%
+    );
+    box-shadow: 
+        /* Vnitřní stín pro mírné zahloubení */
+        inset 0 1px 1px rgba(0, 0, 0, 0.1),
+        /* Zúžení horní hrany dolní strany klávesy */
+        0 1px 0 rgba(255, 255, 255, 0.5),
+        /* Stín klávesy pro zvednutý efekt */
+        0 3px 0 0 #a0a0a0,
+        /* Stín pod klávesou */
+        0 3px 5px 0 rgba(0, 0, 0, 0.3); 
 }

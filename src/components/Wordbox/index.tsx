@@ -9,8 +9,10 @@ interface IWordboxProp {
 }
 
 const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake }) => {
+  
   const [lettersLeft, setLettersLeft] = useState<string>(word)
   const [mistake, setMistake] = useState<boolean>(false)
+  const [shake, setShake] = useState<boolean>(false)
 
   useEffect(
     () => {
@@ -32,10 +34,13 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
           } else {
             setLettersLeft(x => x.slice(1))
             setMistake(false)
+            setShake(false)
           }
         } else {
           setMistake(true)
           onMistake()
+          setShake(true)
+          setTimeout(() => setShake(false), 300)
         }
 
       }
@@ -46,22 +51,26 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
         active && document.removeEventListener('keyup', handleKeyUp)
       }
   },
-    [lettersLeft, onFinish, active, onMistake]
+    [lettersLeft, onFinish, active, onMistake, shake]
   )
 
-  const getWordboxClass = (active: boolean, mistake: boolean): string => {
-    if (active && mistake) {
-      return "wordbox wordbox--active wordbox--mistake"
-    }
+  const getWordboxClass = (active: boolean, mistake: boolean, shake: boolean): string => {
+    let className = "wordbox"
     if (active) {
-      return "wordbox wordbox--active"
+      className += " wordbox--active"
     }
-    return "wordbox"
+    if (mistake) {
+      className += " wordbox--mistake"
+    }
+    if (shake) {
+      className += " wordbox--shake"
+    }
+    return className
   }
 
   
   return (
-    <div className={getWordboxClass(active, mistake)}>{lettersLeft}</div>
+    <div className={getWordboxClass(active, mistake, shake)}>{lettersLeft}</div>
   )
 }
 

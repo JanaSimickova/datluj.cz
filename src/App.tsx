@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Stage from './components/Stage';
 import GameStart from './components/GameStart';
 
-// přidat postupné zvyšování obtížnosti, upravit zatřesení při každé chybě, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
+// přidat postupné zvyšování obtížnosti, na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
 
 const App: React.FC = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
