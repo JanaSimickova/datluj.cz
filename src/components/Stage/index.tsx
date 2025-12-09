@@ -39,11 +39,11 @@ const Stage = ({ playerName }: StageProps) => {
 
   // proměnné pro nastavení základních pravidel hry
   const gameDuration: number = 60
-  const wordLength: number = 6
+  const wordLength: number = 5
   const maxMistakes: number = 5
 
   // všechny stavy pro tuto komponentu
-  const [words, setWords] = useState<string[]>(initializeWords(3, 6));
+  const [words, setWords] = useState<string[]>(initializeWords(3, wordLength));
   const [mistakes, setMistakes] = useState<number>(0);
   const [playerData, setPlayerData] = useState<PlayerDataStructure>({
     playerName: playerName,
@@ -55,10 +55,19 @@ const Stage = ({ playerName }: StageProps) => {
   const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
   const [lives, setLives] = useState<number>(maxMistakes)
   
-  // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre
+  // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre, přidání zvyšování obtížnosti
   const handleFinish = () => {
-    const newWord = generateWord(wordLength);
-    setWords([...words.slice(1), newWord]);
+
+    let lengthIncrease = 0;
+    if (playerData.score >= 1) {
+      lengthIncrease = Math.floor((playerData.score - 1) / 3) + 1;
+    }
+    if (lengthIncrease > 5) {
+        lengthIncrease = 5;
+    }
+    const newWord = generateWord(wordLength + lengthIncrease);
+
+    setWords([...words.slice(1), newWord])
     setPlayerData((playerData) => ({
       ...playerData,
       score: playerData.score + 1,
