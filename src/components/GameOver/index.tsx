@@ -6,9 +6,10 @@ interface GameOverProps {
   score: number;
   allScores: HighestScores;
   handleClick: () => void;
+  message: string;
 }
 
-export const GameOver = ({ playerName, score, allScores, handleClick }: GameOverProps) => {
+export const GameOver = ({ playerName, score, allScores, handleClick, message }: GameOverProps) => {
   
   // funkce pro získání správného formátu slova bod do závěrečného vyhodnocení
   const getScoreFormated = (score: number) => {
@@ -27,6 +28,7 @@ export const GameOver = ({ playerName, score, allScores, handleClick }: GameOver
       <p className="gameover__result">
         Výsledek hráče {playerName}: <strong>{getScoreFormated(score)}</strong>
       </p>
+      <p className="gameover__message">{message}</p>
       <h2 className="gameover__table-title">Tabulka nejlepších výsledků</h2>
       <table className="gameover__leaderboard">
         <thead>

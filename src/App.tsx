@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Stage from './components/Stage';
 import GameStart from './components/GameStart';
 
-// na konec hry přidat hlášky typu Neboj, příště to bude lepší, nebo Havně že si alespoň zdravý
+// nastylovat hlášku na konci
 
 const App: React.FC = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);

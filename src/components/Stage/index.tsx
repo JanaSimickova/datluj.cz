@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import Wordbox from '../Wordbox';
 import { GameOver } from '../GameOver';
 import wordList from '../../word-list';
-import './style.css';
 import { Lives } from '../Lives';
+import './style.css';
+import { lowScoreMessages, highScoreMessages } from '../../utils/messages';
 
 // TODO: temporary disable function - remove next line when you start using it
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -54,6 +55,7 @@ const Stage = ({ playerName }: StageProps) => {
   const [time, setTime] = useState<number>(gameDuration);
   const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
   const [lives, setLives] = useState<number>(maxMistakes)
+  const [finalMessage, setFinalMessage] = useState<string>("")
   
   // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre, přidání zvyšování obtížnosti
   const handleFinish = () => {
@@ -96,6 +98,11 @@ const Stage = ({ playerName }: StageProps) => {
     if (!(mistakes >= maxMistakes || gameOver)) return;
     if (hasSavedScore) return;
 
+    if(finalMessage === "") {
+      const message = handleMessage(playerData.score)
+      setFinalMessage(message)
+    }
+
     const stored = localStorage.getItem('highestScores');
     let current: HighestScores = [];
     if (stored) {
@@ -120,7 +127,7 @@ const Stage = ({ playerName }: StageProps) => {
     } catch (e) {
       console.warn('Failed to save score', e);
     }
-  }, [mistakes, gameOver, hasSavedScore, playerData.playerName, playerData.score]);
+  }, [mistakes, gameOver, hasSavedScore, playerData.playerName, playerData.score, finalMessage]);
   
   // nastavení časovače pro celou hru
   useEffect(() => {
@@ -136,7 +143,7 @@ const Stage = ({ playerName }: StageProps) => {
     const timeChangeInterval = setInterval(() => {
       setTime((prev) => {
         if (prev <= 1) {
-          setGameOver(true);
+          setGameOver(true)
           return 0;
         }
         return prev - 1;
@@ -157,6 +164,15 @@ const Stage = ({ playerName }: StageProps) => {
     setTime(gameDuration)
     setHasSavedScore(false)
     setLives(maxMistakes)
+  }
+
+  // funkce pro výběr hlášky podle dosaženého skóre
+  const handleMessage = (score: number) => {
+    if (score < 10) {
+      return lowScoreMessages[Math.floor(Math.random()*lowScoreMessages.length)]
+    } else {
+      return highScoreMessages[Math.floor(Math.random()*highScoreMessages.length)]
+    }
   }
 
   // funkce pro nastavení třídy elementu s odpočtem času
@@ -206,7 +222,7 @@ const Stage = ({ playerName }: StageProps) => {
         </div>
       )}
       {(mistakes >= maxMistakes || gameOver) && (
-        <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain}/>
+        <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain} message={finalMessage}/>
       )}
     </div>
   );
