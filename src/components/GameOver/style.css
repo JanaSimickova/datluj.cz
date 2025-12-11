@@ -32,6 +32,29 @@
 .gameover__message {
   font-size: 20px;
   font-weight: bold;
+  opacity: 0;
+  animation: message-fade-in 1s ease-out 0.5s forwards; 
+  /* 1s: Trvání animace */
+  /* 0.5s: Zpoždění spuštění (ať se neobjeví hned s titulkem) */
+  /* forwards: Zajišťuje, že prvek zůstane v konečném stavu animace */
+}
+
+@keyframes message-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gameover__message--low-score {
+  color: red;
+}
+
+.gameover__message--high-score {
   color: #8fb935;
 }
 

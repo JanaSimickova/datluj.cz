@@ -2,8 +2,6 @@ import { useState } from 'react';
 import Stage from './components/Stage';
 import GameStart from './components/GameStart';
 
-// nastylovat hlášku na konci
-
 const App: React.FC = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [playerName, setPlayerName] = useState<string>("");

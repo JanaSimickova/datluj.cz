@@ -22,13 +22,22 @@ export const GameOver = ({ playerName, score, allScores, handleClick, message }:
     }
   };
 
+  // funkce pro získání stylu hlášky
+  const getMessageClassName = (score: number) => {
+    if (score < 10) {
+      return "gameover__message gameover__message--low-score"
+    } else {
+      return "gameover__message gameover__message--high-score"
+    }
+  }
+
   return (
     <div className="gameover">
       <h2 className="gameover__title">Hra skončila!</h2>
       <p className="gameover__result">
-        Výsledek hráče {playerName}: <strong>{getScoreFormated(score)}</strong>
+        Výsledek hráče <strong>{playerName}</strong>: <strong>{getScoreFormated(score)}</strong>
       </p>
-      <p className="gameover__message">{message}</p>
+      <p className={getMessageClassName(score)}>{message}</p>
       <h2 className="gameover__table-title">Tabulka nejlepších výsledků</h2>
       <table className="gameover__leaderboard">
         <thead>
