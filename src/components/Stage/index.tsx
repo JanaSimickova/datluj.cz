@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Wordbox from '../Wordbox';
 import { GameOver } from '../GameOver';
 import wordList from '../../word-list';
@@ -56,6 +56,8 @@ const Stage = ({ playerName }: StageProps) => {
   const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
   const [lives, setLives] = useState<number>(maxMistakes)
   const [finalMessage, setFinalMessage] = useState<string>("")
+
+  const audioRef = useRef<HTMLAudioElement>(null!)
   
   // funkce pro vygenerování nového slova po napsání celého správného slova, přidání počítání skóre, přidání zvyšování obtížnosti
   const handleFinish = () => {
@@ -93,7 +95,7 @@ const Stage = ({ playerName }: StageProps) => {
     }
   }
 
-  // uložení skóre po dokončení hry
+  // uložení skóre po dokončení hry, zobrazení hlášky na konci hry, přehrání zvuku při konci hry
   useEffect(() => {
     if (!(mistakes >= maxMistakes || gameOver)) return;
     if (hasSavedScore) return;
@@ -102,6 +104,8 @@ const Stage = ({ playerName }: StageProps) => {
       const message = handleMessage(playerData.score)
       setFinalMessage(message)
     }
+
+    audioRef.current.play()
 
     const stored = localStorage.getItem('highestScores');
     let current: HighestScores = [];
@@ -222,7 +226,10 @@ const Stage = ({ playerName }: StageProps) => {
         </div>
       )}
       {(mistakes >= maxMistakes || gameOver) && (
-        <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain} message={finalMessage}/>
+        <>
+          <audio ref={audioRef} src="/game-over.mp3"></audio>
+          <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain} message={finalMessage}/>
+        </>
       )}
     </div>
   );

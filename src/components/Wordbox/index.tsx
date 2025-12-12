@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './style.css';
 
 interface IWordboxProp {
@@ -13,7 +13,9 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
   const [lettersLeft, setLettersLeft] = useState<string>(word)
   const [mistake, setMistake] = useState<boolean>(false)
   const [shake, setShake] = useState<boolean>(false)
+  const audioRef = useRef<HTMLAudioElement>(null!)
 
+  // zkracování slova při správném napsání písmene a přidávání chyb při nesprávném napsání písmene, zatřesení slovem při nesprávném napsání písmene, přehrátí zvuku při nesprávném napsání písmene
   useEffect(
     () => {
       function handleKeyUp(event: KeyboardEvent) {
@@ -41,8 +43,9 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
           onMistake()
           setShake(true)
           setTimeout(() => setShake(false), 300)
+          audioRef.current.currentTime = 0
+          audioRef.current.play()
         }
-
       }
 
       active && document.addEventListener('keyup', handleKeyUp)
@@ -54,6 +57,7 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
     [lettersLeft, onFinish, active, onMistake, shake]
   )
 
+  // funkce pro získání správné třídy pro komponentu Wordbox
   const getWordboxClass = (active: boolean, mistake: boolean, shake: boolean): string => {
     let className = "wordbox"
     if (active) {
@@ -67,10 +71,13 @@ const Wordbox : React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake })
     }
     return className
   }
-
   
   return (
-    <div className={getWordboxClass(active, mistake, shake)}>{lettersLeft}</div>
+    <>
+      <audio ref={audioRef} src="/error-mistake-sound.mp3"></audio>
+      <div className={getWordboxClass(active, mistake, shake)}>{lettersLeft}</div>
+    </>
+    
   )
 }
 

@@ -4,7 +4,7 @@ export const lowScoreMessages = [
   "Skóre sice neoslnilo, ale za snahu máš alespoň jedničku z tělocviku.",
   "Zapomeň na tohle kolo. Byl to jen zahřívací pokus, že?",
   "Tvoje rychlost psaní připomíná spíše psaní dopisu na rozloučenou.",
-  "Gratulace! Právě jsi potvrdil, že jvoje prsty mají talent na jiné věci než klávesnici.",
+  "Gratulace! Právě jsi potvrdil, že tvoje prsty mají talent na jiné věci než klávesnici.",
   "No, alespoň máš nyní spoustu prostoru pro zlepšení. Využij to!",
   "Příště zkus koukat na klávesnici. Je to občas efektivní.",
   "Jestli tohle byl tvůj nejlepší výkon, doporučuji investovat do psacího stroje. Bude to stylovější.",
