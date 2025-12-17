@@ -1,16 +1,37 @@
 import './style.css'
+import { useState, useEffect } from 'react';
 import type { HighestScores } from '../Stage';
+import { lowScoreMessages, highScoreMessages } from '../../utils/messages';
 
 interface GameOverProps {
   playerName: string;
   score: number;
   allScores: HighestScores;
   handleClick: () => void;
-  message: string;
 }
 
-export const GameOver = ({ playerName, score, allScores, handleClick, message }: GameOverProps) => {
+export const GameOver = ({ playerName, score, allScores, handleClick}: GameOverProps) => {
   
+  // stav pro finální hlášku
+  const [finalMessage, setFinalMessage] = useState<string>("")
+
+  // useEffect pro nastavení finální hlášky
+  useEffect(() => {
+    if(finalMessage === "") {
+      const message = handleMessage(score)
+      setFinalMessage(message)
+    }
+  }, [finalMessage, score])
+
+  // funkce pro výběr hlášky podle dosaženého skóre
+  const handleMessage = (score: number) => {
+    if (score < 10) {
+      return lowScoreMessages[Math.floor(Math.random()*lowScoreMessages.length)]
+    } else {
+      return highScoreMessages[Math.floor(Math.random()*highScoreMessages.length)]
+    }
+  }
+
   // funkce pro získání správného formátu slova bod do závěrečného vyhodnocení
   const getScoreFormated = (score: number) => {
     if (score === 1) {
@@ -30,14 +51,14 @@ export const GameOver = ({ playerName, score, allScores, handleClick, message }:
       return "gameover__message gameover__message--high-score"
     }
   }
-
+  
   return (
     <div className="gameover">
       <h2 className="gameover__title">Hra skončila!</h2>
       <p className="gameover__result">
         Výsledek hráče <strong>{playerName}</strong>: <strong>{getScoreFormated(score)}</strong>
       </p>
-      <p className={getMessageClassName(score)}>{message}</p>
+      <p className={getMessageClassName(score)}>{finalMessage}</p>
       <h2 className="gameover__table-title">Tabulka nejlepších výsledků</h2>
       <table className="gameover__leaderboard">
         <thead>

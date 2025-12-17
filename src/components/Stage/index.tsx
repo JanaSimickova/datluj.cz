@@ -4,7 +4,6 @@ import { GameOver } from '../GameOver';
 import wordList from '../../word-list';
 import { Lives } from '../Lives';
 import './style.css';
-import { lowScoreMessages, highScoreMessages } from '../../utils/messages';
 
 // TODO: temporary disable function - remove next line when you start using it
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -55,7 +54,6 @@ const Stage = ({ playerName }: StageProps) => {
   const [time, setTime] = useState<number>(gameDuration);
   const [hasSavedScore, setHasSavedScore] = useState<boolean>(false);
   const [lives, setLives] = useState<number>(maxMistakes)
-  const [finalMessage, setFinalMessage] = useState<string>("")
 
   const audioRef = useRef<HTMLAudioElement>(null!)
   
@@ -100,11 +98,6 @@ const Stage = ({ playerName }: StageProps) => {
     if (!(mistakes >= maxMistakes || gameOver)) return;
     if (hasSavedScore) return;
 
-    if(finalMessage === "") {
-      const message = handleMessage(playerData.score)
-      setFinalMessage(message)
-    }
-
     audioRef.current.play()
 
     const stored = localStorage.getItem('highestScores');
@@ -131,7 +124,7 @@ const Stage = ({ playerName }: StageProps) => {
     } catch (e) {
       console.warn('Failed to save score', e);
     }
-  }, [mistakes, gameOver, hasSavedScore, playerData.playerName, playerData.score, finalMessage]);
+  }, [mistakes, gameOver, hasSavedScore, playerData.playerName, playerData.score]);
   
   // nastavení časovače pro celou hru
   useEffect(() => {
@@ -170,14 +163,7 @@ const Stage = ({ playerName }: StageProps) => {
     setLives(maxMistakes)
   }
 
-  // funkce pro výběr hlášky podle dosaženého skóre
-  const handleMessage = (score: number) => {
-    if (score < 10) {
-      return lowScoreMessages[Math.floor(Math.random()*lowScoreMessages.length)]
-    } else {
-      return highScoreMessages[Math.floor(Math.random()*highScoreMessages.length)]
-    }
-  }
+
 
   // funkce pro nastavení třídy elementu s odpočtem času
   const setTimerClassName = (seconds: number) => {
@@ -228,7 +214,7 @@ const Stage = ({ playerName }: StageProps) => {
       {(mistakes >= maxMistakes || gameOver) && (
         <>
           <audio ref={audioRef} src="/game-over.mp3"></audio>
-          <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain} message={finalMessage}/>
+          <GameOver playerName={playerData.playerName} score={playerData.score} allScores={scores} handleClick={playAgain}/>
         </>
       )}
     </div>
