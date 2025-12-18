@@ -161,9 +161,8 @@ const Stage = ({ playerName }: StageProps) => {
     setTime(gameDuration)
     setHasSavedScore(false)
     setLives(maxMistakes)
+    setWords(initializeWords(3, wordLength))
   }
-
-
 
   // funkce pro nastavení třídy elementu s odpočtem času
   const setTimerClassName = (seconds: number) => {
